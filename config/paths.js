@@ -46,12 +46,12 @@ const appSrc = resolveApp(argsv['app-source'] || 'apps');
 
 // Find each app within the base appSrc directory
 const appEntries = glob.sync(`${appSrc}/*`)
-  // Then find the target/s in each app and reate a set of entries with a
+  // Then find the entries in each app and reate a set of entries with a
   // consistent naming convention so we can easily reference in templates:
   // `${appName}__${entryName}`
   .map((dir) => {
     const appName = path.basename(dir)
-    const entries = glob.sync(dir + "/**/target.js")
+    const entries = glob.sync(dir + "/**/entry.js")
     return entries.map((entry) => {
       const entryName = path.basename(path.dirname(entry))
       return [`${appName}__${entryName}`, entry]
