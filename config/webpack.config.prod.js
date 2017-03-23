@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -8,8 +9,6 @@ const cssNext = require('postcss-cssnext');
 const modulesValues = require('postcss-modules-values');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
-
-const path = require('path');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.

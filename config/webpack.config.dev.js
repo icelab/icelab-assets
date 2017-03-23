@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
@@ -9,8 +10,6 @@ const cssNext = require('postcss-cssnext');
 const modulesValues = require('postcss-modules-values');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
-
-const path = require('path');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we serve from the full domain we’re booting the app on.
