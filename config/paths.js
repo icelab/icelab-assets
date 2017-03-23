@@ -63,8 +63,6 @@ const appEntries = glob.sync(`${appSrc}/*`)
 // We're in ./node_modules/icelab-assets/config/
 module.exports = {
   appPath: resolveApp('.'),
-  // Required for the dev server
-  contentBase: resolveApp(argsv['content-base-path'] || 'public'),
   // Location to build to
   appBuild: resolveApp(argsv['build-path'] || 'public/assets'),
   appPackageJson: resolveApp('package.json'),
