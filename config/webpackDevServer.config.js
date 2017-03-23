@@ -12,7 +12,7 @@ module.exports = {
   // Silence WebpackDevServer's own logs since they're generally not useful.
   // It will still show compile warnings and errors with this setting.
   clientLogLevel: 'none',
-  contentBase: paths.appPublic,
+  contentBase: paths.contentBase,
   // By default files from `contentBase` will not trigger a page reload.
   watchContentBase: true,
   // Enable hot reloading server. It will provide /sockjs-node/ endpoint

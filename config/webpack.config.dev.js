@@ -18,7 +18,7 @@ const protocol = process.env.ASSETS_HTTPS === 'true' ? 'https' : 'http';
 const host = process.env.ASSETS_HOST || 'localhost';
 const port = parseInt(process.env.ASSETS_PORT, 10) || 8080;
 const serverBase = `${protocol}://${host}:${port}`;
-const publicPath = `${serverBase}${paths.servedPath}`;
+const publicPath = `${serverBase}${paths.publicPath}`;
 // Some apps do not use client-side routing with pushState.
 // For these, "homepage" can be set to "." to enable relative asset paths.
 const shouldUseRelativeAssetPaths = publicPath === './';

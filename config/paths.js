@@ -4,6 +4,8 @@ const path = require('path');
 const fs = require('fs');
 var glob = require('glob');
 const url = require('url');
+const parseArgs = require('minimist');
+const argsv = parseArgs(process.argv.slice(2))
 
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebookincubator/create-react-app/issues/637
@@ -40,7 +42,7 @@ function resolveOwn(relativePath) {
 }
 
 // Set the base folder for app code
-const appSrc = resolveApp('apps');
+const appSrc = resolveApp(argsv['app-source'] || 'apps');
 
 // Find each app within the base appSrc directory
 const appEntries = glob.sync(`${appSrc}/*`)
@@ -61,19 +63,19 @@ const appEntries = glob.sync(`${appSrc}/*`)
 // We're in ./node_modules/icelab-assets/config/
 module.exports = {
   appPath: resolveApp('.'),
-  appPublic: resolveApp('public'),
+  // Required for the dev server
+  contentBase: resolveApp(argsv['content-base-path'] || 'public'),
   // Location to build to
-  appBuild: resolveApp('public/assets'),
+  appBuild: resolveApp(argsv['build-path'] || 'public/assets'),
   appPackageJson: resolveApp('package.json'),
   appSrc: appSrc,
   // Where does the code sit?
   appEntries: appEntries,
   appNodeModules: resolveApp('node_modules'),
   nodePaths: nodePaths,
-  // These properties only exist before ejecting:
-  ownPath: resolveOwn('.'),
   ownNodeModules: resolveOwn('node_modules'), // This is empty on npm 3
-  servedPath: '/assets/',
+  // The served public path
+  publicPath: argsv['public-path'] || '/assets/',
   // testsSetup: resolveApp('src/setupTests.js'),
   yarnLockFile: resolveApp('yarn.lock'),
 };
