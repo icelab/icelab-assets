@@ -1,5 +1,7 @@
 'use strict';
 
+var fs = require('fs');
+var path = require('path');
 const chalk = require('chalk');
 const webpack = require('webpack');
 
@@ -26,7 +28,14 @@ module.exports = function createWebpackCompiler(config, onReadyCallback) {
   // Whether or not you have warnings or errors, you will get this event.
   compiler.plugin('done', stats => {
     if (typeof onReadyCallback === 'function') {
-      onReadyCallback(isFirstCompile);
+      // Extract any CSS/JS assets
+      var assets = stats
+        .toJson()
+        .assets.filter(asset => /\.(js|css)$/.test(asset.name))
+        .map(asset => {
+          return asset.name;
+        });
+      onReadyCallback(isFirstCompile, assets);
     }
     isFirstCompile = false;
   });

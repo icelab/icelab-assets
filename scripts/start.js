@@ -34,14 +34,23 @@ function run(port) {
   // Create a webpack compiler that is configured with custom messages.
   const compiler = createWebpackCompiler(
     config,
-    function onReady(showInstructions) {
+    function onReady(showInstructions, assets) {
       if (!showInstructions) {
         return;
       }
+      const serverUrl = `${protocol}://${host}:${port}`
       console.log();
       console.log('The assets server is running at:');
       console.log();
-      console.log(`  ${chalk.cyan(`${protocol}://${host}:${port}/`)}`);
+      console.log(`  ${chalk.cyan(`${serverUrl}`)}`);
+      console.log();
+      if (assets.length > 0) {
+        console.log('Building these CSS/JS files:');
+        console.log();
+        assets.forEach(asset => {
+          console.log(`  ${chalk.cyan(`${serverUrl}${paths.publicPath}${asset}`)}`);
+        });
+      }
       console.log();
       console.log('Note that the development build is not optimized.');
       console.log(
