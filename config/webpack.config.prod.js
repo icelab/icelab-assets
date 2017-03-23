@@ -6,7 +6,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const atImport = require('postcss-import');
 const cssNext = require('postcss-cssnext');
-const modulesValues = require('postcss-modules-values');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 
@@ -192,8 +191,6 @@ module.exports = {
                       // Add module-like @import support to our CSS. This sets the context for all imports
                       // to be the base entry point.
                       atImport(),
-                      // Expand @values from CSS Modules (we use these in formalist-standard-react)
-                      modulesValues,
                       // cssnext gives us compilation of future-CSS syntax, it also includes autoprefixer
                       // so we don't need to add that separately.
                       cssNext({

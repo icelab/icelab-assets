@@ -7,7 +7,6 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const atImport = require('postcss-import');
 const cssNext = require('postcss-cssnext');
-const modulesValues = require('postcss-modules-values');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 
@@ -193,8 +192,6 @@ module.exports = {
                   loader: 'css-loader',
                   options: {
                     importLoaders: 1,
-                    modules: true,
-                    localIdentName: '[name]__[local]___[hash:base64:5]',
                   },
                 },
                 {
@@ -202,8 +199,6 @@ module.exports = {
                   options: {
                     ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
                     plugins: () => [
-                      // Expand @values from CSS Modules (we use these in formalist-standard-react)
-                      modulesValues,
                       // Add module-like @import support to our CSS. This sets the context for all imports
                       // to be the base entry point.
                       atImport(),
