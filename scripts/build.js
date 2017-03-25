@@ -14,13 +14,15 @@ const fs = require('fs-extra');
 const path = require('path');
 const url = require('url');
 const webpack = require('webpack');
-const config = require('../config/webpack.config.prod');
+let config = require('../config/webpack.config.prod');
 const paths = require('../config/paths');
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
 
 const measureFileSizesBeforeBuild = FileSizeReporter.measureFileSizesBeforeBuild;
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
 const useYarn = fs.existsSync(paths.yarnLockFile);
+
+const hasAppConfig = fs.existsSync(paths.appWebpackConfigProd);
 
 // First, read the current file sizes in build directory.
 // This lets us display how much they changed later.
@@ -46,8 +48,12 @@ function printErrors(summary, errors) {
 // Create the production build and print the deployment instructions.
 function build(previousFileSizes) {
   console.log('Creating an optimized production build...');
-
   let compiler;
+  // Merge configurations using webpack-merge default smart strategy
+  // https://github.com/survivejs/webpack-merge
+  if (hasAppConfig) {
+    config = merge.smart(config, require(paths.appWebpackConfigDev))
+  }
   try {
     compiler = webpack(config);
   } catch (err) {

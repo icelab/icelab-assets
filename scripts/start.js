@@ -12,12 +12,13 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const detect = require('detect-port');
+const merge = require('webpack-merge');
 const WebpackDevServer = require('webpack-dev-server');
 const clearConsole = require('react-dev-utils/clearConsole');
 const getProcessForPort = require('react-dev-utils/getProcessForPort');
 const prompt = require('react-dev-utils/prompt');
 const paths = require('../config/paths');
-const config = require('../config/webpack.config.dev');
+let config = require('../config/webpack.config.dev');
 const devServerConfig = require('../config/webpackDevServer.config');
 const createWebpackCompiler = require('./utils/createWebpackCompiler');
 
@@ -25,12 +26,19 @@ const useYarn = fs.existsSync(paths.yarnLockFile);
 const cli = useYarn ? 'yarn' : 'npm';
 const isInteractive = process.stdout.isTTY;
 
+const hasAppConfig = fs.existsSync(paths.appWebpackConfigDev);
+
 const DEFAULT_PORT = parseInt(process.env.ASSETS_PORT, 10) || 8080;
 
 function run(port) {
   const protocol = process.env.ASSETS_HTTPS === 'true' ? 'https' : 'http';
   const host = process.env.ASSETS_HOST || 'localhost';
 
+  // Merge configurations using webpack-merge default smart strategy
+  // https://github.com/survivejs/webpack-merge
+  if (hasAppConfig) {
+    config = merge.smart(config, require(paths.appWebpackConfigDev))
+  }
   // Create a webpack compiler that is configured with custom messages.
   const compiler = createWebpackCompiler(
     config,
