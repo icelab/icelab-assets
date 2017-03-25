@@ -141,7 +141,6 @@ module.exports = {
           /\.html$/,
           /\.(js|jsx)$/,
           /\.css$/,
-          /\.mcss$/,
           /\.json$/,
           /\.bmp$/,
           /\.gif$/,
@@ -180,46 +179,6 @@ module.exports = {
           cacheDirectory: true,
         },
       },
-      // Handle loading CSS Modules files
-      {
-        test: /\.mcss$/,
-        loader: ExtractTextPlugin.extract(
-          Object.assign(
-            {
-              fallback: 'style-loader',
-              use: [
-                {
-                  loader: 'css-loader',
-                  options: {
-                    importLoaders: 1,
-                  },
-                },
-                {
-                  loader: 'postcss-loader',
-                  options: {
-                    ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
-                    plugins: () => [
-                      // Add module-like @import support to our CSS. This sets the context for all imports
-                      // to be the base entry point.
-                      atImport(),
-                      // cssnext gives us compilation of future-CSS syntax, it also includes autoprefixer
-                      // so we don't need to add that separately.
-                      cssNext({
-                        browsers: [
-                          '>1%',
-                          'last 4 versions',
-                          'Firefox ESR',
-                          'not ie < 9', // React doesn't support IE8 anyway
-                        ],
-                      }),
-                    ],
-                  },
-                },
-              ],
-            },
-            extractTextPluginOptions
-          )
-        ),
       },
       // The notation here is somewhat confusing.
       // "postcss" loader applies autoprefixer to our CSS.
