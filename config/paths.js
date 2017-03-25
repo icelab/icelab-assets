@@ -66,6 +66,8 @@ module.exports = {
   // Location to build to
   appBuild: resolveApp(argsv['build-path'] || 'public/assets'),
   appPackageJson: resolveApp('package.json'),
+  appWebpackConfigDev: resolveApp('webpack.config.dev.js'),
+  appWebpackConfigProd: resolveApp('webpack.config.prod.js'),
   appSrc: appSrc,
   // Where does the code sit?
   appEntries: appEntries,
