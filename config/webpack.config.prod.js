@@ -132,31 +132,36 @@ module.exports = {
           /\.jpe?g$/,
           /\.png$/,
         ],
-        loader: 'file-loader',
-        options: {
-          name: '[path][name].[hash:8].[ext]',
-        },
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: '[path][name].[hash:8].[ext]',
+          },
+        }],
       },
       // "url" loader works just like "file" loader but it also embeds
       // assets smaller than specified size as data URLs to avoid requests.
       {
         test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-        loader: 'url-loader',
-        options: {
-          limit: 10000,
-          name: '[path][name].[hash:8].[ext]',
-        },
+        use: [{
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+            name: '[path][name].[hash:8].[ext]',
+          },
+        }],
       },
       // Process JS with Babel.
       {
         test: /\.(js|jsx)$/,
         include: paths.appSrc,
-        loader: 'babel-loader',
-
-        options: {
-          babelrc: false,
-          presets: [require.resolve('babel-preset-react-app')],
-        },
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            babelrc: false,
+            presets: [require.resolve('babel-preset-react-app')],
+          },
+        }],
       },
       // The notation here is somewhat confusing.
       // "postcss" loader applies autoprefixer to our CSS.
@@ -172,7 +177,7 @@ module.exports = {
       // in the main CSS file.
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract(
+        use: ExtractTextPlugin.extract(
           Object.assign(
             {
               fallback: 'style-loader',

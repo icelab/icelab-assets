@@ -147,38 +147,43 @@ module.exports = {
           /\.jpe?g$/,
           /\.png$/,
         ],
-        loader: 'file-loader',
-        options: {
-          name: '[path][name].[ext]',
-        },
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: '[path][name].[ext]',
+          },
+        }],
       },
       // "url" loader works like "file" loader except that it embeds assets
       // smaller than specified limit in bytes as data URLs to avoid requests.
       // A missing `test` is equivalent to a match.
       {
         test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-        loader: 'url-loader',
-        options: {
-          limit: 10000,
-          name: '[path][name].[ext]',
-        },
+        use: [{
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+            name: '[path][name].[ext]',
+          },
+        }],
       },
       // Process JS with Babel.
       {
         test: /\.(js|jsx)$/,
         include: paths.appSrc,
-        loader: 'babel-loader',
-        options: {
-          // @remove-on-eject-begin
-          babelrc: false,
-          presets: [require.resolve('babel-preset-react-app')],
-          // @remove-on-eject-end
-          // This is a feature of `babel-loader` for webpack (not Babel itself).
-          // It enables caching results in ./node_modules/.cache/babel-loader/
-          // directory for faster rebuilds.
-          cacheDirectory: true,
-        },
-      },
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            // @remove-on-eject-begin
+            babelrc: false,
+            presets: [require.resolve('babel-preset-react-app')],
+            // @remove-on-eject-end
+            // This is a feature of `babel-loader` for webpack (not Babel itself).
+            // It enables caching results in ./node_modules/.cache/babel-loader/
+            // directory for faster rebuilds.
+            cacheDirectory: true,
+          },
+        }],
       },
       // The notation here is somewhat confusing.
       // "postcss" loader applies autoprefixer to our CSS.
@@ -194,7 +199,8 @@ module.exports = {
       // in the main CSS file.
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract(
+        // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+        use: ExtractTextPlugin.extract(
           Object.assign(
             {
               fallback: 'style-loader',
@@ -231,7 +237,6 @@ module.exports = {
             extractTextPluginOptions
           )
         ),
-        // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
       },
       // ** STOP ** Are you adding a new loader?
       // Remember to add the new extension(s) to the "url" loader exclusion list.
