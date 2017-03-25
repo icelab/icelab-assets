@@ -77,6 +77,7 @@ module.exports = {
     // This does not produce real files. It's just the virtual path that is
     // served by WebpackDevServer in development.
     filename: "[name].js",
+    chunkFilename: "chunk.[name].js",
     // This is the URL that app is served from. We use "/" in development.
     publicPath: publicPath,
   },
@@ -174,10 +175,9 @@ module.exports = {
         use: [{
           loader: 'babel-loader',
           options: {
-            // @remove-on-eject-begin
             babelrc: false,
             presets: [require.resolve('babel-preset-react-app')],
-            // @remove-on-eject-end
+            plugins: [require.resolve('babel-plugin-syntax-dynamic-import')],
             // This is a feature of `babel-loader` for webpack (not Babel itself).
             // It enables caching results in ./node_modules/.cache/babel-loader/
             // directory for faster rebuilds.
