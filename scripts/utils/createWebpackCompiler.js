@@ -31,7 +31,9 @@ module.exports = function createWebpackCompiler(config, onReadyCallback) {
       // Extract any CSS/JS assets
       var assets = stats
         .toJson()
-        .assets.filter(asset => /\.(js|css)$/.test(asset.name))
+        .assets.filter(asset => (
+          /\.(js|css)$/.test(asset.name) && !/^chunk/.test(asset.name)
+        ))
         .map(asset => {
           return asset.name;
         });
