@@ -1,13 +1,13 @@
 # Icelab Assets
 
+An opinionated asset setup for Icelab projects.
+
 ## Installation
 
 Add `icelab-assets` as a `devDependency` to your app with one of the below tasks:
 
 ```
-# Using npm
 npm install --save-dev icelab/icelab-assets
-# Using yarn
 yarn add --dev icelab/icelab-assets
 ```
 
@@ -18,27 +18,29 @@ Then add this config to the `scripts` section of your `package.json` file:
   "start": "icelab-assets start",
   "build": "icelab-assets build",
   "test": "icelab-assets test"
+  "create-entry": "icelab-assets create-entry",
 }
 ```
 
 ## Usage
 
-Once you’re set up, you’ll have three tasks available that you can run with either `npm run` or `yarn run`:
+Once you’re set up, you’ll have four tasks available that you can run with either `npm run` or `yarn run`:
 
 * `start` will boot a development server at <http://localhost:8080> which will watch your asset files and rebuild on the fly.
 * `build` will create a production-ready build for each of your asset entry points.
 * `test` will use [jest](https://facebook.github.io/jest/) to run the tests for your assets.
+* `create-entry` allows you to create a new asset entry point at a directory path: `yarn run create-entry apps/path/to/the/entry`
 
-By default, `icelab-assets` looks for asset entry points at `apps/**/**/entry.js` and will generate a name for that entry based on its parent directories. Given the following entry points (and assuming they only returned JavaScript):
+By default, `icelab-assets` looks for asset entry points at `apps/**/**/entry.js` and will generate a name for that entry based on its parent directories using this basic formula: `apps/:app_name/**/:entry_name/`. Thus, given the following entry points (and assuming they only return JavaScript):
 
 ```
 apps/admin/assets/admin/entry.js
 apps/admin/assets/inline/entry.js
 apps/main/assets/public/entry.js
-apps/main/assets/critical/entry.js
+apps/main/assets/nested/deeply/for/some/reason/critical/entry.js
 ```
 
-These output names would be generated:
+These output files would be generated:
 
 ```
 admin__admin.js
@@ -69,7 +71,7 @@ If you were using this in conjunction with WordPress for example, you might do s
 
 This would traverse within `wp-content/themes` for any `entry.js` files and use them as the entry points for the build.
 
-### App-specific webpack configurations
+### Webpack configurations
 
 You can adjust the webpack configuration for either development or production environments by creating a matching config file in the root of your application:
 
@@ -93,13 +95,13 @@ module.exports = {
         // Needs to match the `include` value in the default configuration
         include: path.resolve('apps'),
         use: [{
-          loader: 'foobar'
+          loader: 'awesome-loader'
         }]
       },
       {
         test: /\.css$/,
         use: [{
-          loader: 'foobar'
+          loader: 'awesome-loader'
         }]
       },
     ],
@@ -107,7 +109,7 @@ module.exports = {
 }
 ```
 
-This would append the theoretical `foobar` loader to the end of the pipeline in both cases.
+This would append the theoretical `awesome-loader` loader to the end of the pipeline in both cases.
 
 ## Features
 
@@ -116,12 +118,18 @@ This would append the theoretical `foobar` loader to the end of the pipeline in 
 ### JavaScript
 
 * ES6
+* Linting
+* Babel compilation
 
 ## Things to note
 
 * CSS import paths
 
+## TODOs
+
+- [ ] [Tree shaking doesn’t work at the moment](https://github.com/facebookincubator/create-react-app/pull/1742), alas. Once it’s sorted in `create-react-app` we should be able to pull it in automatically.
+
 ## Credits
 
-The structure, concept, and most of the code from [create-react-app](https://github.com/facebookincubator/create-react-app) forms the basis for this repo.
+The structure, concept, and most of the code from [create-react-app](https://github.com/facebookincubator/create-react-app) forms the basis for this repo. We still leverage a bunch of stuff from that project so that we’re providing stable and ongoing improvements.
 
