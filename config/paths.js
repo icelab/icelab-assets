@@ -45,6 +45,7 @@ function resolveOwn(relativePath) {
 const appSrc = resolveApp(argsv['app-source-path'] || 'apps');
 
 // Find each app within the base appSrc directory
+const appEntryDirs = []
 const appEntries = glob.sync(`${appSrc}/*`)
   // Then find the entries in each app and reate a set of entries with a
   // consistent naming convention so we can easily reference in templates:
@@ -53,6 +54,8 @@ const appEntries = glob.sync(`${appSrc}/*`)
     const appName = path.basename(dir)
     const entries = glob.sync(dir + "/**/entry.js")
     return entries.map((entry) => {
+      // Capture the parent dir for appEntryDirs at the same time
+      appEntryDirs.push(path.dirname(entry))
       const entryName = path.basename(path.dirname(entry))
       return [`${appName}__${entryName}`, entry]
     })
@@ -70,7 +73,10 @@ module.exports = {
   appWebpackConfigProd: resolveApp('webpack.config.prod.js'),
   appSrc: appSrc,
   // Where does the code sit?
+  // This doesn’t actually export a path but it still feels like
+  // right place for this stuff
   appEntries: appEntries,
+  appEntryDirs: appEntryDirs,
   appNodeModules: resolveApp('node_modules'),
   nodePaths: nodePaths,
   ownNodeModules: resolveOwn('node_modules'), // This is empty on npm 3
