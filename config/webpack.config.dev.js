@@ -97,9 +97,6 @@ module.exports = {
     // some tools, although we do not recommend using it, see:
     // https://github.com/facebookincubator/create-react-app/issues/290
     extensions: ['.js', '.json', '.jsx'],
-    alias: {
-      'formalist-theme': path.resolve(paths.appNodeModules, 'formalist-standard-react/lib/components/ui')
-    },
   },
   // Resolve loaders (webpack plugins for CSS, images, transpilation) from the
   // directory of `react-scripts` itself rather than the project directory.
