@@ -17,8 +17,8 @@ Then add this config to the `scripts` section of your `package.json` file:
 "scripts": {
   "start": "icelab-assets start",
   "build": "icelab-assets build",
-  "test": "icelab-assets test"
-  "create-entry": "icelab-assets create-entry",
+  "test": "icelab-assets test",
+  "create-entry": "icelab-assets create-entry"
 }
 ```
 
@@ -55,7 +55,7 @@ main__critical.js
 
 You can override default path options using the following command line args:
 
-* `--app-source-path` — defaults to `apps`
+* `--source-path` — defaults to `apps`
 * `--build-path` — defaults to `public/assets`
 * `--public-path` — defaults to `/assets/`
 
@@ -63,9 +63,9 @@ If you were using this in conjunction with WordPress for example, you might do s
 
 ```json
 "scripts": {
-  "start": "icelab-assets start --app-source-path=wp-content/themes",
-  "build": "icelab-assets build --app-source-path=wp-content/themes",
-  "test": "icelab-assets test --app-source-path=wp-content/themes"
+  "start": "icelab-assets start --source-path=wp-content/themes",
+  "build": "icelab-assets build --source-path=wp-content/themes",
+  "test": "icelab-assets test --source-path=wp-content/themes"
 }
 ```
 

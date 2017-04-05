@@ -42,7 +42,7 @@ function resolveOwn(relativePath) {
 }
 
 // Set the base folder for app code
-const appSrc = resolveApp(argsv['app-source-path'] || 'apps');
+const appSrc = resolveApp(argsv['source-path'] || 'apps');
 
 // Find each app within the base appSrc directory
 const appEntryDirs = []
