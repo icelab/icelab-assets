@@ -111,19 +111,93 @@ module.exports = {
 
 This would append the theoretical `awesome-loader` loader to the end of the pipeline in both cases.
 
-## Features
+## CSS
 
-### CSS
+We post-process CSS using [CSS Next](http://cssnext.io) so all the features listed there are available to us. The top-line niceties are:
 
-### JavaScript
+* Autoprefixing
+* CSS variables
+* Nested selectors
+* Colour functions
 
-* ES6
-* Linting
-* Babel compilation
-* Bundle splitting
-* Top-level entry point `import` resolution
+We also add support for importing CSS inline using `@import` via [postcss-import](https://github.com/postcss/postcss-import). Something to note about this is that _all_ references in CSS must be made relative to the root of the current entry — this includes `@import` and `url` references:
 
-#### Code linting and formatting
+```css
+/**
+ * Given a file structure like:
+ *
+ * /entry-name
+ *   /foo
+ *      index.js
+ *      image.jpg
+ *
+ * A reference to `image.jpg` must include the parent path.
+ */
+.foo {
+  background-image: url('foo/image.jpg');
+}
+```
+
+## JavaScript
+
+### Language features and polyfills
+
+We support a superset of the latest JavaScript standard. In addition to [ES6](https://github.com/lukehoban/es6features) syntax features, we also supports:
+
+* [Exponentiation Operator](https://github.com/rwaldron/exponentiation-operator) (ES2016).
+* [Async/await](https://github.com/tc39/ecmascript-asyncawait) (ES2017).
+* [Object Rest/Spread Properties](https://github.com/sebmarkbage/ecmascript-rest-spread) (stage 3 proposal).
+* [Class Fields and Static Properties](https://github.com/tc39/proposal-class-public-fields) (stage 2 proposal).
+* [JSX](https://facebook.github.io/react/docs/introducing-jsx.html) and [Flow](https://flowtype.org/) syntax.
+
+Learn more about [different proposal stages](https://babeljs.io/docs/plugins/#presets-stage-x-experimental-presets-).
+
+Note that **the project only includes a few ES6 [polyfills](https://en.wikipedia.org/wiki/Polyfill)**:
+
+* [`Object.assign()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) via [`object-assign`](https://github.com/sindresorhus/object-assign).
+* [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) via [`promise`](https://github.com/then/promise).
+* [`fetch()`](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) via [`whatwg-fetch`](https://github.com/github/fetch).
+
+If you use any other ES6+ features that need **runtime support** (such as `Array.from()` or `Symbol`), make sure you are including the appropriate polyfills manually, or that the browsers you are targeting already support them.
+
+#### Top-level entry point import resolution
+
+We’ve added support for top-level resolution of `import`ed modules. This means that you can specify an import as though you are at the top-level of each entry. For example:
+
+```js
+// Given a file at ./entry-folder/foo/bar/index.js
+export default function bar () {
+  // ... do something
+}
+// From entry-folder/foo/index.js we can do a relative call as usual:
+import bar from "./bar";
+// ... or scope it from the root of the `entry-folder`
+import bar from "foo/bar";
+```
+
+### Code splitting
+
+We support code splitting in babel using the [syntax-dynamic-import](http://babeljs.io/docs/plugins/syntax-dynamic-import/) plugin which allows you to, as the name suggests, dynamically import modules. Here’s an example:
+
+```js
+// determine-date/index.js
+export default function determineDate() {
+  import('moment')
+    .then(moment => moment().format('LLLL'))
+    .then(str => console.log(str))
+    .catch(err => console.log('Failed to load moment', err));
+}
+
+// other-file/index.js
+import determineDate from 'determine-date'
+determineDate(); // moment won't be loaded until this line is _executed_
+```
+
+You can use this method for imports within your application too, they’re not restricted to external modules.
+
+The build process will automatically split any dynamic imports out into separate chunks, and the bundled JavaScript will load them on the fly without you having to do anything more. You may notice them as `0.abc1234.chunk.js` files in your final build. This should mean smaller initial payloads for apps, but it’s worth considering that separate chunks will potentially take time to load, and you’ll need to have your UI sympathetic to that.
+
+### Code linting and formatting
 
 JS code in your source paths will be linted using [eslint](http://eslint.org). We use the base config from create-react-app, which is released as a separate package called [eslint-config-react-app](https://www.npmjs.com/package/eslint-config-react-app), and then add some small adjustments in each environment:
 
@@ -137,7 +211,7 @@ If you’re using an eslint plugin/extension in your editor, you’ll need to co
 // Place your settings in this file to overwrite default and user settings.
 {
   // Custom eslint config
-	"eslint.options": {
+  "eslint.options": {
     "configFile": "./node_modules/icelab-assets/eslintrc"
   },
   "eslint.nodePath":  "./node_modules/icelab-assets/node_modules"
@@ -146,13 +220,10 @@ If you’re using an eslint plugin/extension in your editor, you’ll need to co
 
 Once that’s integrated, you should be able to use eslint’s "Fix all auto-fixable problems" command to fix and format your code with prettier.
 
-## Things to note
-
-* CSS import paths
-
 ## TODOs
 
 - [ ] [Tree shaking doesn’t work at the moment](https://github.com/facebookincubator/create-react-app/pull/1742), alas. Once it’s sorted in `create-react-app` we should be able to pull it in automatically.
+- [ ] Enable relative import paths for CSS references (postcss-import only supports root-level resolution).
 
 ## Credits
 
