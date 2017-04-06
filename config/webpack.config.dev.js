@@ -121,6 +121,10 @@ module.exports = {
             options: {
               configFile: path.join(__dirname, '../eslintrc'),
               useEslintrc: false,
+              // Disabling autofix until this issue is resolved in VS Code as
+              // changing the underlying files breaks the undo stack
+              // https://github.com/Microsoft/vscode/issues/2908
+              // fix: true,
             },
             loader: 'eslint-loader',
           },
