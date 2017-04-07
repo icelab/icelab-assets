@@ -13,6 +13,8 @@
     "babelrc",
     "bin",
     "config",
+    "eslintrc",
+    "eslintrc.prod",
     "scripts",
     "utils"
   ],
