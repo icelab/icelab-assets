@@ -14,6 +14,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const url = require('url');
 const webpack = require('webpack');
+const merge = require('webpack-merge');
 let config = require('../config/webpack.config.prod');
 const paths = require('../config/paths');
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
