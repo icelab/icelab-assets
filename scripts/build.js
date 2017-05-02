@@ -53,7 +53,7 @@ function build(previousFileSizes) {
   // Merge configurations using webpack-merge default smart strategy
   // https://github.com/survivejs/webpack-merge
   if (hasAppConfig) {
-    config = merge.smart(config, require(paths.appWebpackConfigDev))
+    config = merge.smart(config, require(paths.appWebpackConfigProd))
   }
   try {
     compiler = webpack(config);
