@@ -13,6 +13,8 @@ module.exports = {
   // It will still show compile warnings and errors with this setting.
   clientLogLevel: 'none',
   contentBase: false,
+  // Allow all CORS requests in development
+  headers: { "Access-Control-Allow-Origin": "*" },
   // Enable hot reloading server. It will provide /sockjs-node/ endpoint
   // for the WebpackDevServer client so it can learn when the files were
   // updated. The WebpackDevServer client is included as an entry point
