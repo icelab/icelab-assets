@@ -128,28 +128,11 @@ module.exports = {
           /\.html$/,
           /\.(js|jsx)$/,
           /\.css$/,
-          /\.json$/,
-          /\.bmp$/,
-          /\.gif$/,
-          /\.jpe?g$/,
-          /\.png$/,
-          /\.svg$/,
+          /\.json$/
         ],
         use: [{
           loader: 'file-loader',
           options: {
-            name: '[path][name].[hash:8].[ext]',
-          },
-        }],
-      },
-      // "url" loader works just like "file" loader but it also embeds
-      // assets smaller than specified size as data URLs to avoid requests.
-      {
-        test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.svg$/],
-        use: [{
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
             name: '[path][name].[hash:8].[ext]',
           },
         }],

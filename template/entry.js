@@ -8,4 +8,4 @@ import "./index.js";
 
 // This will inspect all subdirectories from the context (this file) and
 // require files matching the regex.
-require.context(".", true, /^\.\/.*\.(jpe?g|png|gif|svg)$/);
+require.context(".", true, /^\.\/.*\.(jpe?g|png|gif|svg|woff2?|ttf|otf|eot)$/);
