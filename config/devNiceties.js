@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 // This is a workaround used alongside the webpack-dev-server hot-module-reload
 // feature as it's quite chatty on the console, and there's no currently no
@@ -10,7 +10,7 @@
   global.console.log = function() {
     if (
       !(arguments.length == 1 &&
-        typeof arguments[0] === 'string' &&
+        typeof arguments[0] === "string" &&
         arguments[0].match(/^\[(HMR|WDS)\]/))
     ) {
       console_log.apply(global.console, arguments);
@@ -20,7 +20,7 @@
   global.console.warn = function() {
     if (
       !(arguments.length == 1 &&
-        typeof arguments[0] === 'string' &&
+        typeof arguments[0] === "string" &&
         arguments[0].match(/^\[(HMR|WDS)\]/))
     ) {
       console_warn.apply(global.console, arguments);
@@ -30,18 +30,24 @@
   // Automatically reload *extracted* CSS in development when hotUpdates are issued
   // https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/30#issuecomment-231010662
   global.addEventListener(
-    'message',
+    "message",
     function(e) {
       if (
-        typeof e.data !== 'String' || e.data.search('webpackHotUpdate') === -1
+        typeof e.data !== "String" ||
+        e.data.search("webpackHotUpdate") === -1
       )
         return;
-      document.querySelectorAll('link[href][rel=stylesheet]').forEach(link => {
-        if (link.href.search("localhost") > -1) {
-          const nextStyleHref = link.href.replace(/(\?\d+)?$/, `?${Date.now()}`);
-          link.href = nextStyleHref;
-        }
-      });
+      global.document
+        .querySelectorAll("link[href][rel=stylesheet]")
+        .forEach(function(link) {
+          if (link.href.search("localhost") > -1) {
+            var nextStyleHref = link.href.replace(
+              /(\?\d+)?$/,
+              "?" + Date.now()
+            );
+            link.href = nextStyleHref;
+          }
+        });
     },
     false
   );
