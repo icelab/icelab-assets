@@ -16,7 +16,6 @@ const merge = require('webpack-merge');
 const WebpackDevServer = require('webpack-dev-server');
 const clearConsole = require('react-dev-utils/clearConsole');
 const getProcessForPort = require('react-dev-utils/getProcessForPort');
-const prompt = require('react-dev-utils/prompt');
 const paths = require('../config/paths');
 let config = require('../config/webpack.config.dev');
 const devServerConfig = require('../config/webpackDevServer.config');
