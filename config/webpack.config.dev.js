@@ -47,19 +47,28 @@ module.exports = {
   // enable "hot" CSS and auto-refreshes for JS.
   entry: paths.appEntries.reduce((output, entry) => {
     const [name, location] = entry;
-    console.log("location", location);
-    output[name] = [
-      // Add our custom dev niceties:
-      // - Supressing the output of the webpack-dev-server and hot-module-resolveLoader
-      //   in the console. No more [WDS] and [MHR] messages.
-      // - Automatically reloading extracted CSS
-      require.resolve("./devNiceties"),
-      // When you save a file, the client will either apply hot updates (in case
-      // of CSS changes), or refresh the page (in case of JS changes). When you
-      // make a syntax error, this client will display a syntax error overlay.
-      // the line below with these two lines if you prefer the stock client:
-      require.resolve("webpack-dev-server/client") + `?${serverBase}`,
-      require.resolve("webpack/hot/dev-server"),
+    // If the entry name begins with `inline` we consider it inline
+    const inline = /__inline/.test(name);
+    // Build up the definition for each entry
+    let entryDefinition = [];
+    // Skip hot-reload and other unnecessary things for "inline" assets
+    if (!inline) {
+      entryDefinition = entryDefinition.concat([
+        // Add our custom dev niceties:
+        // - Supressing the output of the webpack-dev-server and hot-module-resolveLoader
+        //   in the console. No more [WDS] and [MHR] messages.
+        // - Automatically reloading extracted CSS
+        require.resolve("./devNiceties"),
+        // When you save a file, the client will either apply hot updates (in case
+        // of CSS changes), or refresh the page (in case of JS changes). When you
+        // make a syntax error, this client will display a syntax error overlay.
+        // the line below with these two lines if you prefer the stock client:
+        require.resolve("webpack-dev-server/client") + `?${serverBase}`,
+        require.resolve("webpack/hot/dev-server")
+      ]);
+    }
+    // Add these for all entries
+    entryDefinition = entryDefinition.concat([
       // We ship a few polyfills by default:
       require.resolve("./polyfills"),
       // Finally, this is where the code lives for this entry
@@ -67,7 +76,8 @@ module.exports = {
       // We include the app code last so that if there is a runtime error during
       // initialization, it doesn't blow up the WebpackDevServer client, and
       // changing JS code would still trigger a refresh.
-    ];
+    ]);
+    output[name] = entryDefinition;
     return output;
   }, {}),
   output: {
