@@ -49,6 +49,8 @@ main__public.js
 main__critical.js
 ```
 
+Note: entry names that begin with `inline` are assumed to be files that will eventually be included inline in HTML output. These files thus exclude some dev-related niceties like hot-reloading to avoid clogging up the generated HTML.
+
 ## Configuration
 
 ### Paths

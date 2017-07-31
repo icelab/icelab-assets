@@ -51,6 +51,7 @@ module.exports = {
   entry: paths.appEntries.reduce((output, entry) => {
     const [name, location] = entry
     output[name] = [
+      // We ship a few polyfills by default
       require.resolve('./polyfills'),
       location,
     ]
