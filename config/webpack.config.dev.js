@@ -168,7 +168,6 @@ module.exports = {
             options: {
               babelrc: false,
               presets: [require.resolve("babel-preset-react-app")],
-              plugins: [require.resolve("babel-plugin-syntax-dynamic-import")],
               // This is a feature of `babel-loader` for webpack (not Babel itself).
               // It enables caching results in ./node_modules/.cache/babel-loader/
               // directory for faster rebuilds.
