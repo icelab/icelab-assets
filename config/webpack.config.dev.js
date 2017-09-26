@@ -5,6 +5,7 @@ const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 const WatchMissingNodeModulesPlugin = require("react-dev-utils/WatchMissingNodeModulesPlugin");
+const PrettierPlugin = require("prettier-webpack-plugin");
 const atImport = require("postcss-import");
 const cssNext = require("postcss-cssnext");
 const getClientEnvironment = require("./env");
@@ -241,6 +242,12 @@ module.exports = {
     new webpack.DefinePlugin(env.stringified),
     // This is necessary to emit hot updates (currently CSS only):
     new webpack.HotModuleReplacementPlugin(),
+    // Format CSS with Prettier. JS is handled through the eslint-loader
+    // (so that we can mix in other eslint configuration)
+    new PrettierPlugin({
+      parser: "postcss",
+      extensions: [".css"]
+    }),
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
     new ExtractTextPlugin({
       filename: "[name].css"

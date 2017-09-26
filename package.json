@@ -69,5 +69,8 @@
   },
   "optionalDependencies": {
     "fsevents": "1.0.17"
+  },
+  "devDependencies": {
+    "prettier-webpack-plugin": "^0.2.2"
   }
 }
