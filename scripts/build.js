@@ -25,6 +25,10 @@ const useYarn = fs.existsSync(paths.yarnLockFile);
 
 const hasAppConfig = fs.existsSync(paths.appWebpackConfigProd);
 
+// These sizes are pretty large. We'll warn for bundles exceeding them.
+const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
+const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
+
 // First, read the current file sizes in build directory.
 // This lets us display how much they changed later.
 measureFileSizesBeforeBuild(paths.appBuild).then(previousFileSizes => {
@@ -88,7 +92,13 @@ function build(previousFileSizes) {
     console.log();
     // This incorrectly prints the output directory as `build` but its tied up in react-dev-utils
     // and it seems not worth replicating simply to avoid that.
-    printFileSizesAfterBuild(stats, previousFileSizes);
+    printFileSizesAfterBuild(
+      stats,
+      previousFileSizes,
+      paths.appBuild,
+      WARN_AFTER_BUNDLE_GZIP_SIZE,
+      WARN_AFTER_CHUNK_GZIP_SIZE
+    );
     console.log();
 
     const openCommand = process.platform === 'win32' ? 'start' : 'open';

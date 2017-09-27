@@ -65,7 +65,9 @@ module.exports = {
         // make a syntax error, this client will display a syntax error overlay.
         // the line below with these two lines if you prefer the stock client:
         require.resolve("webpack-dev-server/client") + `?${serverBase}`,
-        require.resolve("webpack/hot/dev-server")
+        // Disabled until the ExtractText plugin supports HMR
+        // https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/592
+        // require.resolve("webpack/hot/dev-server")
       ]);
     }
     // Add these for all entries
@@ -168,7 +170,6 @@ module.exports = {
             options: {
               babelrc: false,
               presets: [require.resolve("babel-preset-react-app")],
-              plugins: [require.resolve("babel-plugin-syntax-dynamic-import")],
               // This is a feature of `babel-loader` for webpack (not Babel itself).
               // It enables caching results in ./node_modules/.cache/babel-loader/
               // directory for faster rebuilds.
@@ -241,7 +242,9 @@ module.exports = {
     // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
     new webpack.DefinePlugin(env.stringified),
     // This is necessary to emit hot updates (currently CSS only):
-    new webpack.HotModuleReplacementPlugin(),
+    // Disabled until the ExtractText plugin supports HMR
+    // https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/592
+    // new webpack.HotModuleReplacementPlugin(),
     // Format CSS with Prettier. JS is handled through the eslint-loader
     // (so that we can mix in other eslint configuration)
     new PrettierPlugin({
