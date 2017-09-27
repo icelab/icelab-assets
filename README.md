@@ -203,7 +203,7 @@ The build process will automatically split any dynamic imports out into separate
 
 JS code in your source paths will be linted using [eslint](http://eslint.org). We use the base config from create-react-app, which is released as a separate package called [eslint-config-react-app](https://www.npmjs.com/package/eslint-config-react-app), and then add some small adjustments in each environment:
 
-* In development, we include [prettier](https://github.com/prettier/prettier) to enforce a code style across our projects. It’s recommended you [add integration with your editor](https://github.com/prettier/prettier#editor-integration) in some way so that you don’t get annoyed by all the errors. Ideally this formatting happens for us as part of the build, but this feature is disabled at the moment due to [an issue with Visual Studio Code](https://github.com/Microsoft/vscode/issues/2908).
+* In development, we include [prettier](https://github.com/prettier/prettier) to enforce a code style across our projects. This integration will automatically format both JS and CSS whenever you change files.
 * In production, we do not include prettier so it will not break your builds. We do however add a `no-debugger` rule to ensure that you can’t push production code that includes debugging lines.
 
 If you’re using an eslint plugin/extension in your editor, you’ll need to configure it to read the `icelab-assets` configuration as its hidden within the package. For Visual Studio code you can add a workspace-specific configuration that looks like this:
