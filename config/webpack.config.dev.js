@@ -248,7 +248,7 @@ module.exports = {
     // Format CSS with Prettier. JS is handled through the eslint-loader
     // (so that we can mix in other eslint configuration)
     new PrettierPlugin({
-      parser: "postcss",
+      parser: "css",
       extensions: [".css"]
     }),
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
