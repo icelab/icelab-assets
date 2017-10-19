@@ -50,10 +50,12 @@ module.exports = {
     const [name, location] = entry;
     // If the entry name begins with `inline` we consider it inline
     const inline = /__inline/.test(name);
+    // Test env?
+    const testEnv = process.env.ASSETS_ENV && process.env.ASSETS_ENV === "test"
     // Build up the definition for each entry
     let entryDefinition = [];
     // Skip hot-reload and other unnecessary things for "inline" assets
-    if (!inline) {
+    if (!inline && !testEnv) {
       entryDefinition = entryDefinition.concat([
         // Add our custom dev niceties:
         // - Supressing the output of the webpack-dev-server and hot-module-resolveLoader

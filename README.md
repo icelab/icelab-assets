@@ -222,6 +222,16 @@ If you’re using an eslint plugin/extension in your editor, you’ll need to co
 
 Once that’s integrated, you should be able to use eslint’s "Fix all auto-fixable problems" command to fix and format your code with prettier.
 
+## PhantomJS usage
+
+There are some dev-related packages injected into the development build that aren’t relevant in testing environments and these can cause issues with PhantomJS. If you want to exclude them you’ll need to set:
+
+```
+ASSETS_ENV=test
+```
+
+In your ENV (either using `.env`) or when you start the development server. This is only relevant for *development*, production builds do not include these packages.
+
 ## TODOs
 
 - [ ] [Tree shaking doesn’t work at the moment](https://github.com/facebookincubator/create-react-app/pull/1742), alas. Once it’s sorted in `create-react-app` we should be able to pull it in automatically.
