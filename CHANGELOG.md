@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+# v1.0.5 2018-01-10
+
+* Add `.ico` to default list of files included in bundle when *not* explicitly included by other files.
+
 # v1.0.4 2017-12-13
 
 * Bump webpack deps to avoid issue with child cache.

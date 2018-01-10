@@ -1,6 +1,6 @@
 {
   "name": "icelab-assets",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Configuration and scripts for assets.",
   "repository": "icelab/icelab-assets",
   "engines": {
