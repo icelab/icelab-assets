@@ -122,24 +122,6 @@ We post-process CSS using [CSS Next](http://cssnext.io) so all the features list
 * Nested selectors
 * Colour functions
 
-We also add support for importing CSS inline using `@import` via [postcss-import](https://github.com/postcss/postcss-import). Something to note about this is that _all_ references in CSS must be made relative to the root of the current entry — this includes `@import` and `url` references:
-
-```css
-/**
- * Given a file structure like:
- *
- * /entry-name
- *   /foo
- *      index.js
- *      image.jpg
- *
- * A reference to `image.jpg` must include the parent path.
- */
-.foo {
-  background-image: url('foo/image.jpg');
-}
-```
-
 ## JavaScript
 
 ### Language features and polyfills

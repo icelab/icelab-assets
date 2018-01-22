@@ -6,7 +6,6 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 const WatchMissingNodeModulesPlugin = require("react-dev-utils/WatchMissingNodeModulesPlugin");
 const PrettierPlugin = require("prettier-webpack-plugin");
-const atImport = require("postcss-import");
 const cssNext = require("postcss-cssnext");
 const getClientEnvironment = require("./env");
 const paths = require("./paths");
@@ -211,9 +210,6 @@ module.exports = {
                   options: {
                     ident: "postcss", // https://webpack.js.org/guides/migrating/#complex-options
                     plugins: () => [
-                      // Add module-like @import support to our CSS. This sets the context for all imports
-                      // to be the base entry point.
-                      atImport(),
                       // cssnext gives us compilation of future-CSS syntax, it also includes autoprefixer
                       // so we don't need to add that separately.
                       cssNext({

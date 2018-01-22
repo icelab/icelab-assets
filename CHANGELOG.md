@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+# v2.0.0 2018-01-22
+
+* Remove `postcss-import` dependency. This likely is a breaking change as paths to imports will be resolved relative to the they’re imported _from_.
+
 # v1.0.5 2018-01-10
 
 * Add `.ico` to default list of files included in bundle when *not* explicitly included by other files.
