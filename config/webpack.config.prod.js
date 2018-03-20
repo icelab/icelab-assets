@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const atImport = require('postcss-import');
+const postcssURL = require("postcss-url");
 const cssNext = require('postcss-cssnext');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
@@ -185,6 +186,9 @@ module.exports = {
                       // Add module-like @import support to our CSS. This sets the context for all imports
                       // to be the base entry point.
                       atImport(),
+                      // postcss-url "rebases" any `url()` references in CSS to their original relative
+                      // position on the filesystem (so that postcss-import doesn't break things)
+                      postcssURL(),
                       // cssnext gives us compilation of future-CSS syntax, it also includes autoprefixer
                       // so we don't need to add that separately.
                       cssNext({

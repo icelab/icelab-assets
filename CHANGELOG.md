@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+# v2.0.0 2018-03-20
+
+* Breaking change: Add [`postcss-url`](https://github.com/postcss/postcss-url) to the postcss pipeline. Any `url()` references will need to be updated to be relative paths to the file the reference is included in.
+
 # v1.0.6 2018-03-14
 
 * Ensure production CSS is minified.

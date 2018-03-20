@@ -1,6 +1,6 @@
 {
   "name": "icelab-assets",
-  "version": "1.0.6",
+  "version": "2.0.0",
   "description": "Configuration and scripts for assets.",
   "repository": "icelab/icelab-assets",
   "engines": {
@@ -56,6 +56,7 @@
     "postcss-cssnext": "^3.0.2",
     "postcss-import": "^11.0.0",
     "postcss-loader": "2.0.6",
+    "postcss-url": "7.3.1",
     "prettier": "^1.7.0",
     "prettier-webpack-plugin": "^0.2.2",
     "promise": "8.0.1",
