@@ -251,6 +251,7 @@ module.exports = {
       parser: "css",
       extensions: [".css"]
     }),
+    // Note: this won't work without MiniCssExtractPlugin.loader in `loaders`.
     new MiniCssExtractPlugin({
       filename: "[name].css",
       chunkFilename: "[id].css"

@@ -2,8 +2,10 @@
 
 const path = require("path");
 const webpack = require("webpack");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ManifestPlugin = require("webpack-manifest-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const atImport = require("postcss-import");
 const postcssURL = require("postcss-url");
 const cssNext = require("postcss-cssnext");
@@ -27,15 +29,6 @@ if (env.stringified["process.env"].NODE_ENV !== '"production"') {
 
 // Note: defined here because it will be used more than once.
 const cssFilename = "[name].[contenthash:8].css";
-
-// ExtractTextPlugin expects the build output to be flat.
-// (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
-// However, our output is structured with css, js and media folders.
-// To have this structure working with relative paths, we have to use custom options.
-const extractTextPluginOptions = shouldUseRelativeAssetPaths
-  ? // Making sure that the publicPath goes back to to build folder.
-    { publicPath: Array(cssFilename.split("/").length).join("../") }
-  : {};
 
 // This is the production configuration.
 // It compiles slowly and is focused on producing a fast and minimal bundle.
@@ -162,56 +155,90 @@ module.exports = {
       // in the main CSS file.
       {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract(
-          Object.assign(
-            {
-              fallback: "style-loader",
-              use: [
-                {
-                  loader: "css-loader",
-                  options: {
-                    importLoaders: 1,
-                    minimize: true
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1,
+              minimize: true
+            }
+          },
+          {
+            loader: "postcss-loader",
+            options: {
+              ident: "postcss", // https://webpack.js.org/guides/migrating/#complex-options
+              plugins: () => [
+                // Add module-like @import support to our CSS. This sets the context for all imports
+                // to be the base entry point.
+                atImport(),
+                // postcss-url "rebases" any `url()` references in CSS to their original relative
+                // position on the filesystem (so that postcss-import doesn't break things)
+                postcssURL(),
+                // cssnext gives us compilation of future-CSS syntax, it also includes autoprefixer
+                // so we don't need to add that separately.
+                cssNext({
+                  browsers: [
+                    ">1%",
+                    "last 4 versions",
+                    "Firefox ESR",
+                    "not ie < 9" // React doesn't support IE8 anyway
+                  ],
+                  features: {
+                    customProperties: {
+                      warnings: false
+                    }
                   }
-                },
-                {
-                  loader: "postcss-loader",
-                  options: {
-                    ident: "postcss", // https://webpack.js.org/guides/migrating/#complex-options
-                    plugins: () => [
-                      // Add module-like @import support to our CSS. This sets the context for all imports
-                      // to be the base entry point.
-                      atImport(),
-                      // postcss-url "rebases" any `url()` references in CSS to their original relative
-                      // position on the filesystem (so that postcss-import doesn't break things)
-                      postcssURL(),
-                      // cssnext gives us compilation of future-CSS syntax, it also includes autoprefixer
-                      // so we don't need to add that separately.
-                      cssNext({
-                        browsers: [
-                          ">1%",
-                          "last 4 versions",
-                          "Firefox ESR",
-                          "not ie < 9" // React doesn't support IE8 anyway
-                        ],
-                        features: {
-                          customProperties: {
-                            warnings: false
-                          }
-                        }
-                      })
-                    ]
-                  }
-                }
+                })
               ]
-            },
-            extractTextPluginOptions
-          )
-        )
-        // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+            }
+          }
+        ]
       }
       // ** STOP ** Are you adding a new loader?
       // Remember to add the new extension(s) to the "url" loader exclusion list.
+    ]
+  },
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        uglifyOptions: {
+          parse: {
+            // we want uglify-js to parse ecma 8 code. However, we don't want it
+            // to apply any minfication steps that turns valid ecma 5 code
+            // into invalid ecma 5 code. This is why the 'compress' and 'output'
+            // sections only apply transformations that are ecma 5 safe
+            // https://github.com/facebook/create-react-app/pull/4234
+            ecma: 8
+          },
+          compress: {
+            ecma: 5,
+            warnings: false,
+            // Disabled because of an issue with Uglify breaking seemingly valid code:
+            // https://github.com/facebook/create-react-app/issues/2376
+            // Pending further investigation:
+            // https://github.com/mishoo/UglifyJS2/issues/2011
+            comparisons: false
+          },
+          mangle: {
+            safari10: true
+          },
+          output: {
+            ecma: 5,
+            comments: false,
+            // Turned on because emoji and regex is not minified properly using default
+            // https://github.com/facebook/create-react-app/issues/2488
+            ascii_only: true
+          }
+        },
+        // Use multi-process parallel running to improve the build speed
+        // Default number of concurrent runs: os.cpus().length - 1
+        parallel: true,
+        // Enable file caching
+        cache: true,
+        sourceMap: true
+      }),
+      new OptimizeCSSAssetsPlugin()
     ]
   },
   plugins: [
@@ -220,24 +247,10 @@ module.exports = {
     // It is absolutely essential that NODE_ENV was set to production here.
     // Otherwise React will be compiled in the very slow development mode.
     new webpack.DefinePlugin(env.stringified),
-    // Minify the code.
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        screw_ie8: true, // React doesn't support IE8
-        warnings: false
-      },
-      mangle: {
-        screw_ie8: true
-      },
-      output: {
-        comments: false,
-        screw_ie8: true
-      },
-      sourceMap: true
-    }),
-    // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
-    new ExtractTextPlugin({
-      filename: cssFilename
+    // Note: this won't work without MiniCssExtractPlugin.loader in `loaders`.
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+      chunkFilename: "[id].css"
     }),
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without

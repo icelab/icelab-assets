@@ -26,7 +26,7 @@ module.exports = function createWebpackCompiler(config, onReadyCallback) {
 
   // "done" event fires when Webpack has finished recompiling the bundle.
   // Whether or not you have warnings or errors, you will get this event.
-  compiler.plugin("done", stats => {
+  compiler.hooks.done.tap("done", stats => {
     if (typeof onReadyCallback === "function") {
       // Extract any CSS/JS assets
       var assets = stats
