@@ -2,9 +2,10 @@
 
 const path = require("path");
 const webpack = require("webpack");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
-const WatchMissingNodeModulesPlugin = require("react-dev-utils/WatchMissingNodeModulesPlugin");
+// Disabled until https://github.com/facebook/create-react-app/pull/4077 is merged
+// const WatchMissingNodeModulesPlugin = require("react-dev-utils/WatchMissingNodeModulesPlugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const PrettierPlugin = require("prettier-webpack-plugin");
 const atImport = require("postcss-import");
 const postcssURL = require("postcss-url");
@@ -25,20 +26,11 @@ const shouldUseRelativeAssetPaths = publicPath === "./";
 // Get environment variables to inject into our app.
 const env = getClientEnvironment();
 
-// ExtractTextPlugin expects the build output to be flat.
-// (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
-// However, our output is structured with css, js and media folders.
-// To have this structure working with relative paths, we have to use custom options.
-const extractTextPluginOptions = shouldUseRelativeAssetPaths // Making sure that the publicPath goes back to to build folder.
-  ? {
-      publicPath: Array(cssFilename.split("/").length).join("../")
-    }
-  : {};
-
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
 // The production configuration is different and lives in a separate file.
 module.exports = {
+  mode: "development",
   // You may want 'eval' instead if you prefer to see the compiled output in DevTools.
   // See the discussion in https://github.com/facebookincubator/create-react-app/issues/343.
   devtool: "cheap-module-source-map",
@@ -200,52 +192,44 @@ module.exports = {
       // in the main CSS file.
       {
         test: /\.css$/,
-        // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
-        use: ExtractTextPlugin.extract(
-          Object.assign(
-            {
-              fallback: "style-loader",
-              use: [
-                {
-                  loader: "css-loader",
-                  options: {
-                    importLoaders: 1
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1
+            }
+          },
+          {
+            loader: "postcss-loader",
+            options: {
+              ident: "postcss", // https://webpack.js.org/guides/migrating/#complex-options
+              plugins: () => [
+                // Add module-like @import support to our CSS. This sets the context for all imports
+                // to be the base entry point.
+                atImport(),
+                // postcss-url "rebases" any `url()` references in CSS to their original relative
+                // position on the filesystem (so that postcss-import doesn't break things)
+                postcssURL(),
+                // cssnext gives us compilation of future-CSS syntax, it also includes autoprefixer
+                // so we don't need to add that separately.
+                cssNext({
+                  browsers: [
+                    ">1%",
+                    "last 4 versions",
+                    "Firefox ESR",
+                    "not ie < 9" // React doesn't support IE8 anyway
+                  ],
+                  features: {
+                    customProperties: {
+                      warnings: false
+                    }
                   }
-                },
-                {
-                  loader: "postcss-loader",
-                  options: {
-                    ident: "postcss", // https://webpack.js.org/guides/migrating/#complex-options
-                    plugins: () => [
-                      // Add module-like @import support to our CSS. This sets the context for all imports
-                      // to be the base entry point.
-                      atImport(),
-                      // postcss-url "rebases" any `url()` references in CSS to their original relative
-                      // position on the filesystem (so that postcss-import doesn't break things)
-                      postcssURL(),
-                      // cssnext gives us compilation of future-CSS syntax, it also includes autoprefixer
-                      // so we don't need to add that separately.
-                      cssNext({
-                        browsers: [
-                          ">1%",
-                          "last 4 versions",
-                          "Firefox ESR",
-                          "not ie < 9" // React doesn't support IE8 anyway
-                        ],
-                        features: {
-                          customProperties: {
-                            warnings: false
-                          }
-                        }
-                      })
-                    ]
-                  }
-                }
+                })
               ]
-            },
-            extractTextPluginOptions
-          )
-        )
+            }
+          }
+        ]
       }
       // ** STOP ** Are you adding a new loader?
       // Remember to add the new extension(s) to the "url" loader exclusion list.
@@ -264,18 +248,18 @@ module.exports = {
     // Format CSS with Prettier. JS is handled through the eslint-loader
     // (so that we can mix in other eslint configuration)
     new PrettierPlugin({
-      parser: "postcss",
+      parser: "css",
       extensions: [".css"]
     }),
-    // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
-    new ExtractTextPlugin({
-      filename: "[name].css"
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+      chunkFilename: "[id].css"
     }),
     // If you require a missing module and then `npm install` it, you still have
     // to restart the development server for Webpack to discover it. This plugin
     // makes the discovery automatic so you don't have to restart.
-    // See https://github.com/facebookincubator/create-react-app/issues/186
-    new WatchMissingNodeModulesPlugin(paths.appNodeModules)
+    // Disabled until https://github.com/facebook/create-react-app/pull/4077 is merged
+    // new WatchMissingNodeModulesPlugin(paths.appNodeModules)
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
