@@ -29,9 +29,10 @@ const env = getClientEnvironment();
 // (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
 // However, our output is structured with css, js and media folders.
 // To have this structure working with relative paths, we have to use custom options.
-const extractTextPluginOptions = shouldUseRelativeAssetPaths
-  ? // Making sure that the publicPath goes back to to build folder.
-    { publicPath: Array(cssFilename.split("/").length).join("../") }
+const extractTextPluginOptions = shouldUseRelativeAssetPaths // Making sure that the publicPath goes back to to build folder.
+  ? {
+      publicPath: Array(cssFilename.split("/").length).join("../")
+    }
   : {};
 
 // This is the development configuration.
@@ -52,7 +53,7 @@ module.exports = {
     // If the entry name begins with `inline` we consider it inline
     const inline = /__inline/.test(name);
     // Test env?
-    const testEnv = process.env.ASSETS_ENV && process.env.ASSETS_ENV === "test"
+    const testEnv = process.env.ASSETS_ENV && process.env.ASSETS_ENV === "test";
     // Build up the definition for each entry
     let entryDefinition = [];
     // Skip hot-reload and other unnecessary things for "inline" assets
@@ -67,7 +68,7 @@ module.exports = {
         // of CSS changes), or refresh the page (in case of JS changes). When you
         // make a syntax error, this client will display a syntax error overlay.
         // the line below with these two lines if you prefer the stock client:
-        require.resolve("webpack-dev-server/client") + `?${serverBase}`,
+        require.resolve("webpack-dev-server/client") + `?${serverBase}`
         // Disabled until the ExtractText plugin supports HMR
         // https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/592
         // require.resolve("webpack/hot/dev-server")
@@ -123,7 +124,11 @@ module.exports = {
   module: {
     rules: [
       // Disable require.ensure as it's not a standard language feature.
-      { parser: { requireEnsure: false } },
+      {
+        parser: {
+          requireEnsure: false
+        }
+      },
       // First, run the linter.
       // It's important to do this before Babel processes the JS.
       {
@@ -231,7 +236,7 @@ module.exports = {
                           customProperties: {
                             warnings: false
                           }
-                        },
+                        }
                       })
                     ]
                   }
@@ -259,7 +264,7 @@ module.exports = {
     // Format CSS with Prettier. JS is handled through the eslint-loader
     // (so that we can mix in other eslint configuration)
     new PrettierPlugin({
-      parser: "css",
+      parser: "postcss",
       extensions: [".css"]
     }),
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.

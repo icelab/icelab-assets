@@ -1,17 +1,17 @@
-'use strict';
+"use strict";
 
-const config = require('./webpack.config.dev');
-const paths = require('./paths');
+const config = require("./webpack.config.dev");
+const paths = require("./paths");
 
-const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
-const host = process.env.HOST || 'localhost';
+const protocol = process.env.HTTPS === "true" ? "https" : "http";
+const host = process.env.HOST || "localhost";
 
 module.exports = {
   // Enable gzip compression of generated files.
   compress: true,
   // Silence WebpackDevServer's own logs since they're generally not useful.
   // It will still show compile warnings and errors with this setting.
-  clientLogLevel: 'none',
+  clientLogLevel: "none",
   contentBase: false,
   // Allow all CORS requests in development
   headers: { "Access-Control-Allow-Origin": "*" },
@@ -32,10 +32,10 @@ module.exports = {
   // Reportedly, this avoids CPU overload on some systems.
   // https://github.com/facebookincubator/create-react-app/issues/293
   watchOptions: {
-    ignored: /node_modules/,
+    ignored: /node_modules/
   },
   // Enable HTTPS if the HTTPS environment variable is set to 'true'
-  https: protocol === 'https',
+  https: protocol === "https",
   host: host,
-  overlay: false,
+  overlay: false
 };

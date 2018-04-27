@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-var fs = require('fs');
-var path = require('path');
-const chalk = require('chalk');
-const webpack = require('webpack');
+var fs = require("fs");
+var path = require("path");
+const chalk = require("chalk");
+const webpack = require("webpack");
 
 const isInteractive = process.stdout.isTTY;
 let handleCompile;
@@ -15,7 +15,7 @@ module.exports = function createWebpackCompiler(config, onReadyCallback) {
   try {
     compiler = webpack(config, handleCompile);
   } catch (err) {
-    console.log(chalk.red('Failed to compile.'));
+    console.log(chalk.red("Failed to compile."));
     console.log();
     console.log(err.message || err);
     console.log();
@@ -26,14 +26,14 @@ module.exports = function createWebpackCompiler(config, onReadyCallback) {
 
   // "done" event fires when Webpack has finished recompiling the bundle.
   // Whether or not you have warnings or errors, you will get this event.
-  compiler.plugin('done', stats => {
-    if (typeof onReadyCallback === 'function') {
+  compiler.plugin("done", stats => {
+    if (typeof onReadyCallback === "function") {
       // Extract any CSS/JS assets
       var assets = stats
         .toJson()
-        .assets.filter(asset => (
-          /\.(js|css)$/.test(asset.name) && !/^chunk/.test(asset.name)
-        ))
+        .assets.filter(
+          asset => /\.(js|css)$/.test(asset.name) && !/^chunk/.test(asset.name)
+        )
         .map(asset => {
           return asset.name;
         });

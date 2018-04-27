@@ -1,25 +1,26 @@
-'use strict';
+"use strict";
 
 // Do this as the first thing so that any code reading it knows the right env.
-process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = "production";
 
 // Load environment variables from .env file. Suppress warnings using silent
 // if this file is missing. dotenv will never modify any environment variables
 // that have already been set.
 // https://github.com/motdotla/dotenv
-require('dotenv').config({ silent: true });
+require("dotenv").config({ silent: true });
 
-const chalk = require('chalk');
-const fs = require('fs-extra');
-const path = require('path');
-const url = require('url');
-const webpack = require('webpack');
-const merge = require('webpack-merge');
-let config = require('../config/webpack.config.prod');
-const paths = require('../config/paths');
-const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
+const chalk = require("chalk");
+const fs = require("fs-extra");
+const path = require("path");
+const url = require("url");
+const webpack = require("webpack");
+const merge = require("webpack-merge");
+let config = require("../config/webpack.config.prod");
+const paths = require("../config/paths");
+const FileSizeReporter = require("react-dev-utils/FileSizeReporter");
 
-const measureFileSizesBeforeBuild = FileSizeReporter.measureFileSizesBeforeBuild;
+const measureFileSizesBeforeBuild =
+  FileSizeReporter.measureFileSizesBeforeBuild;
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
 const useYarn = fs.existsSync(paths.yarnLockFile);
 
@@ -52,43 +53,43 @@ function printErrors(summary, errors) {
 
 // Create the production build and print the deployment instructions.
 function build(previousFileSizes) {
-  console.log('Creating an optimized production build...');
+  console.log("Creating an optimized production build...");
   let compiler;
   // Merge configurations using webpack-merge default smart strategy
   // https://github.com/survivejs/webpack-merge
   if (hasAppConfig) {
-    config = merge.smart(config, require(paths.appWebpackConfigProd))
+    config = merge.smart(config, require(paths.appWebpackConfigProd));
   }
   try {
     compiler = webpack(config);
   } catch (err) {
-    printErrors('Failed to compile.', [err]);
+    printErrors("Failed to compile.", [err]);
     process.exit(1);
   }
 
   compiler.run((err, stats) => {
     if (err) {
-      printErrors('Failed to compile.', [err]);
+      printErrors("Failed to compile.", [err]);
       process.exit(1);
     }
 
     if (stats.compilation.errors.length) {
-      printErrors('Failed to compile.', stats.compilation.errors);
+      printErrors("Failed to compile.", stats.compilation.errors);
       process.exit(1);
     }
 
     if (process.env.CI && stats.compilation.warnings.length) {
       printErrors(
-        'Failed to compile. When process.env.CI = true, warnings are treated as failures. Most CI servers set this automatically.',
+        "Failed to compile. When process.env.CI = true, warnings are treated as failures. Most CI servers set this automatically.",
         stats.compilation.warnings
       );
       process.exit(1);
     }
 
-    console.log(chalk.green('Compiled successfully.'));
+    console.log(chalk.green("Compiled successfully."));
     console.log();
 
-    console.log('File sizes after gzip:');
+    console.log("File sizes after gzip:");
     console.log();
     // This incorrectly prints the output directory as `build` but its tied up in react-dev-utils
     // and it seems not worth replicating simply to avoid that.
@@ -101,13 +102,18 @@ function build(previousFileSizes) {
     );
     console.log();
 
-    const openCommand = process.platform === 'win32' ? 'start' : 'open';
+    const openCommand = process.platform === "win32" ? "start" : "open";
     const appPackage = require(paths.appPackageJson);
-    const buildPath = paths.appBuild.replace(new RegExp(`^${paths.appPath}`), '');
+    const buildPath = paths.appBuild.replace(
+      new RegExp(`^${paths.appPath}`),
+      ""
+    );
     const publicPath = config.output.publicPath;
     const publicPathname = url.parse(publicPath).pathname;
     console.log(
-      `Build complete in ${chalk.green(buildPath)} assuming they'll be served from ${chalk.green(publicPath)}.`
+      `Build complete in ${chalk.green(
+        buildPath
+      )} assuming they'll be served from ${chalk.green(publicPath)}.`
     );
     console.log();
   });

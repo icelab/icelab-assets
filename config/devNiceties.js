@@ -9,9 +9,11 @@
   var console_log = global.console.log;
   global.console.log = function() {
     if (
-      !(arguments.length == 1 &&
+      !(
+        arguments.length == 1 &&
         typeof arguments[0] === "string" &&
-        arguments[0].match(/^\[(HMR|WDS)\]/))
+        arguments[0].match(/^\[(HMR|WDS)\]/)
+      )
     ) {
       console_log.apply(global.console, arguments);
     }
@@ -19,9 +21,11 @@
   var console_warn = global.console.warn;
   global.console.warn = function() {
     if (
-      !(arguments.length == 1 &&
+      !(
+        arguments.length == 1 &&
         typeof arguments[0] === "string" &&
-        arguments[0].match(/^\[(HMR|WDS)\]/))
+        arguments[0].match(/^\[(HMR|WDS)\]/)
+      )
     ) {
       console_warn.apply(global.console, arguments);
     }
