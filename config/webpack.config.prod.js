@@ -25,8 +25,17 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
   throw new Error('Production builds must have NODE_ENV=production.');
 }
 
+// Allow hashing to be disabled by passing an ENV
+let hashFilenames = true;
+if (
+  env.stringified['process.env'].ASSETS_HASH_FILENAMES
+  && env.stringified['process.env'].ASSETS_HASH_FILENAMES === '"false"'
+) {
+  hashFilenames = false;
+}
+
 // Note: defined here because it will be used more than once.
-const cssFilename = '[name].[contenthash:8].css';
+const cssFilename = hashFilenames ? '[name].[contenthash:8].css' : '[name].css';
 
 // ExtractTextPlugin expects the build output to be flat.
 // (See https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/27)
@@ -64,8 +73,8 @@ module.exports = {
     // Generated JS file names (with nested folders).
     // There will be one main bundle, and one file per asynchronous chunk.
     // We don't currently advertise code splitting but Webpack supports it.
-    filename: '[name].[chunkhash:8].js',
-    chunkFilename: '[name].[chunkhash:8].chunk.js',
+    filename: hashFilenames ? '[name].[chunkhash:8].js' : '[name].js',
+    chunkFilename: hashFilenames ? '[name].[chunkhash:8].chunk.js' : '[name].chunk.js',
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath: publicPath,
   },
@@ -135,7 +144,7 @@ module.exports = {
         use: [{
           loader: 'file-loader',
           options: {
-            name: '[path][name].[hash:8].[ext]',
+            name: hashFilenames ? '[path][name].[hash:8].[ext]' : '[path][name].[ext]',
           },
         }],
       },
