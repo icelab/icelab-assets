@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+# v2.0.2 2018-06-05
+
+* Allow `build` to be run without hashing filenames
+
 # v2.0.1 2018-03-20
 
 * Supress warnings in postcss-custom-properties (through postcss-cssnext)
