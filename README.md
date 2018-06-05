@@ -113,6 +113,14 @@ module.exports = {
 
 This would append the theoretical `awesome-loader` loader to the end of the pipeline in both cases.
 
+### Hashing
+
+Assets are hashed by the `build` script by default. This can be disabled by calling the script with `ASSETS_HASH_FILENAMES=false`:
+
+```
+ASSETS_HASH_FILENAMES=false icelab-assets build
+```
+
 ## CSS
 
 We post-process CSS using [CSS Next](http://cssnext.io) so all the features listed there are available to us. The top-line niceties are:
