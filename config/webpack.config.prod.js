@@ -85,10 +85,7 @@ module.exports = {
     // if there are any conflicts. This matches Node resolution mechanism.
     // https://github.com/facebookincubator/create-react-app/issues/253
     modules: ['node_modules']
-      .concat(paths.nodePaths)
-      // Expose the appEntryDirs as a resolution point so that we can resolve
-      // from the root of each entry point and avoid relative requires
-      .concat(paths.appEntryDirs),
+      .concat(paths.nodePaths),
     // These are the reasonable defaults supported by the Node ecosystem.
     // We also include JSX as a common component filename extension to support
     // some tools, although we do not recommend using it, see:
