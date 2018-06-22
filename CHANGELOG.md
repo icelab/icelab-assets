@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+# v2.0.3 2018-06-22
+
+* Fix top-level absolute requires
+
 # v2.0.2 2018-06-05
 
 * Allow `build` to be run without hashing filenames
