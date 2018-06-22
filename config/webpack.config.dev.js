@@ -6,6 +6,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 const WatchMissingNodeModulesPlugin = require("react-dev-utils/WatchMissingNodeModulesPlugin");
 const PrettierPlugin = require("prettier-webpack-plugin");
+const ResolveEntryModulesPlugin = require("resolve-entry-modules-webpack-plugin");
 const atImport = require("postcss-import");
 const postcssURL = require("postcss-url");
 const cssNext = require("postcss-cssnext");
@@ -105,10 +106,7 @@ module.exports = {
     // if there are any conflicts. This matches Node resolution mechanism.
     // https://github.com/facebookincubator/create-react-app/issues/253
     modules: ["node_modules"]
-      .concat(paths.nodePaths)
-      // Expose the appEntryDirs as a resolution point so that we can resolve
-      // from the root of each entry point and avoid relative requires
-      .concat(paths.appEntryDirs),
+      .concat(paths.nodePaths),
     // These are the reasonable defaults supported by the Node ecosystem.
     // We also include JSX as a common component filename extension to support
     // some tools, although we do not recommend using it, see:
@@ -252,6 +250,9 @@ module.exports = {
     // Makes some environment variables available to the JS code, for example:
     // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
     new webpack.DefinePlugin(env.stringified),
+    // Expose each entry as a resolution point so that we can resolve from the
+    // root of each entry point and avoid relative requires
+    new ResolveEntryModulesPlugin(),
     // This is necessary to emit hot updates (currently CSS only):
     // Disabled until the ExtractText plugin supports HMR
     // https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/592
