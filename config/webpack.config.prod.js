@@ -4,6 +4,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
+const ResolveEntryModulesPlugin = require("resolve-entry-modules-webpack-plugin");
 const atImport = require('postcss-import');
 const postcssURL = require("postcss-url");
 const cssNext = require('postcss-cssnext');
@@ -230,6 +231,9 @@ module.exports = {
     // It is absolutely essential that NODE_ENV was set to production here.
     // Otherwise React will be compiled in the very slow development mode.
     new webpack.DefinePlugin(env.stringified),
+    // Expose each entry as a resolution point so that we can resolve from the
+    // root of each entry point and avoid relative requires
+    new ResolveEntryModulesPlugin(),
     // Minify the code.
     new webpack.optimize.UglifyJsPlugin({
       compress: {
