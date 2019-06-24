@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+# v2.0.5 2019-06-24
+
+* Fix deprecation warning in Prettier output
+
 # v2.0.4 2019-06-24
 
 * Bump eslint past affected versions for [CVE](https://snyk.io/vuln/npm:eslint:20180222)
