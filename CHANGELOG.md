@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+# v2.0.6 2019-06-24
+
+* Fix missing plugin reference to ResolveEntryModulesPlugin
+
 # v2.0.5 2019-06-24
 
 * Fix deprecation warning in Prettier output
