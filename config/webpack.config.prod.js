@@ -153,7 +153,7 @@ module.exports = {
         use: [{
           loader: 'babel-loader',
           options: {
-            babelrc: false,
+            babelrc: true,
             presets: [require.resolve('babel-preset-react-app')],
             plugins: [require.resolve('babel-plugin-syntax-dynamic-import')],
           },
