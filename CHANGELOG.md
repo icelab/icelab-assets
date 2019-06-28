@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+# v2.0.7 2019-06-28
+
+* [Allow consuming apps to override babelrc](https://github.com/icelab/icelab-assets/pull/15)
+
 # v2.0.6 2019-06-24
 
 * Fix missing plugin reference to ResolveEntryModulesPlugin
