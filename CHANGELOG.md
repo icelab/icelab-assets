@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+# v2.0.8 2019-07-04
+
+* [Enable babel macros support](https://github.com/icelab/icelab-assets/pull/16)
+
 # v2.0.7 2019-06-28
 
 * [Allow consuming apps to override babelrc](https://github.com/icelab/icelab-assets/pull/15)
