@@ -61,7 +61,7 @@
     "prettier": "^1.7.0",
     "prettier-webpack-plugin": "^0.2.2",
     "promise": "8.0.1",
-    "react-dev-utils": "^4.0.1",
+    "react-dev-utils": "^11.0.4",
     "resolve-entry-modules-webpack-plugin": "^1.0.1",
     "style-loader": "0.18.2",
     "webpack": "3.10.0",
